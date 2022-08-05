@@ -1,15 +1,17 @@
+from pickle import FALSE, TRUE
 import requests
 import json
 
-def buscar_jugador():
+dic1=[]
+x=TRUE
+
+while x==TRUE:
     nombre= input("Ingrese el nombre del jugador: ")
     nombre= nombre.lower()
     nombre= nombre.capitalize()
-
     apellido= input("Ingrese el apellido del jugador: ")
     apellido= apellido.lower()
     apellido= apellido.capitalize()
-
     try :
         responsed = requests.get (f'https://www.thesportsdb.com/api/v1/json/2/searchplayers.php?p={nombre}%20{apellido}')
         if responsed.status_code == 200:
@@ -28,23 +30,33 @@ def buscar_jugador():
             Dominante=pagina['player'][0]['strSide']
             foto= pagina['player'][0]['strCutout']
 
-            print("Nombre del jugador "+ nombre
-            +"\nNacionalidad del jugador "+ nacionalidad
-            +"\nEquipo del jugador "+ equipo
-            +"\nAltura del jugador "+ altura  
-            +"\nPeso del jugador "+ peso
-            +"\nDescripcion del jugador "+ descripcion
-            +"\nDeporte del jugador "+ deporte
-            +"\nFecha de nacimiento del jugador "+ fechaNacimiento
-            +"\nFecha de muerte del jugador "+ fechaMuerte
-            +"\nGenero del jugador "+ genero
-            +"\nPosicion del jugador "+ posicion
-            +"\nDominante del jugador "+ Dominante
-            +"\nFoto del jugador "+ foto
-            )
+            lines=["Nombre del jugador "+ nombre,
+            "Nacionalidad del jugador "+ nacionalidad,
+            "Equipo del jugador "+ equipo,
+            "Altura del jugador "+ altura , 
+            "Peso del jugador "+ peso,
+            "Descripcion del jugador "+ descripcion,
+            "Deporte del jugador "+ deporte,
+            "Fecha de nacimiento del jugador "+ fechaNacimiento,
+            "Fecha de muerte del jugador "+ fechaMuerte,
+            "Genero del jugador "+ genero,
+            "Posicion del jugador "+ posicion,
+            "Dominante del jugador "+ Dominante,
+            "Foto del jugador "+ foto]
 
+            with open('PlayerInfo.txt', 'w') as f:
+                for line in lines:
+                    f.write(line)
+                    f.write('\n')
     except Exception as e:
         print(e)
         print('Jugador no encontrado')
-
-
+    x= input("Desea buscar otro jugador? (s/n) ")
+    x= x.lower()
+    if x=='n':
+        x=FALSE
+        print('Finalizando Busqueda')
+        break
+    elif x=='s':
+        x=TRUE
+        continue
